@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.cardapio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 250px;
+    border-radius: 5px;
+}
+
+.item h2 {
+    margin-top: 0;
+}
+
+#carrinho {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    max-width: 300px;
+}
+
+#carrinho div {
+    margin-bottom: 10px;
+}
+
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+}
