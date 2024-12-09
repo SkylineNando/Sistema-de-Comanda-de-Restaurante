@@ -1,0 +1,32 @@
+<?php
+require 'db_connect.php';
+
+$dados = file_get_contents('php://input');
+$itens = json_decode($dados, true);
+
+if(!$itens || !is_array($itens) || count($itens) === 0) {
+    echo json_encode(['sucesso' => false]);
+    exit;
+}
+
+$total = 0;
+foreach($itens as $item) {
+    $total += $item['preco'] * $item['quantidade'];
+}
+
+// Cria o pedido
+$stmt = $conn->prepare("INSERT INTO pedidos (total) VALUES (?)");
+$stmt->bind_param("d", $total);
+$stmt->execute();
+$pedido_id = $stmt->insert_id;
+$stmt->close();
+
+// Insere os itens do pedido
+$stmtItem = $conn->prepare("INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unit) VALUES (?, ?, ?, ?)");
+foreach($itens as $item) {
+    $stmtItem->bind_param("iiid", $pedido_id, $item['id'], $item['quantidade'], $item['preco']);
+    $stmtItem->execute();
+}
+$stmtItem->close();
+
+echo json_encode(['sucesso' => true, 'pedido_id' => $pedido_id]);
